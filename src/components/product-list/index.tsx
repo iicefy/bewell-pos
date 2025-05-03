@@ -13,7 +13,8 @@ const ProductList = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const pageQuery: number = parseInt(searchParams.get("page") || "1", 10);
-  const [search, setSearch] = useState("");
+  const searchQuery: string = searchParams.get("search") || "";
+  const [search, setSearch] = useState(searchQuery);
 
   const pagination = {
     currentPage: pageQuery || 1,
@@ -22,7 +23,7 @@ const ProductList = () => {
 
   const searchDebounce = useDebounce(search, 500, () => {
     navigate({
-      search: `?page=1`,
+      search: `?page=1&search=${search}`,
     });
   });
 
@@ -58,7 +59,9 @@ const ProductList = () => {
           }}
           onPageChange={(page) => {
             navigate({
-              search: `?page=${page}`,
+              search: searchQuery
+                ? `?page=${page}&search=${searchQuery}`
+                : `?page=${page}`,
             });
           }}
         />
@@ -76,6 +79,7 @@ const ProductList = () => {
       </div>
       <SearchInput
         inputProps={{
+          value: search,
           placeholder: "Search",
           className: "w-full bg-white",
           onChange: (e) => setSearch(e.target.value),
