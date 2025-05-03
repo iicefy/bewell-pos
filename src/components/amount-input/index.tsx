@@ -3,15 +3,22 @@ import { Button } from "../ui/button";
 
 type AmountInputProps = {
   value: number;
-  onChange?: (value: number) => void;
+  onAdd?: () => void;
+  onDeduct?: () => void;
   min?: number;
   max?: number;
 };
 
-const AmountInput = ({ value, onChange, min, max }: AmountInputProps) => {
+const AmountInput = ({
+  value,
+  onAdd,
+  onDeduct,
+  min,
+  max,
+}: AmountInputProps) => {
   if (value === 0) {
     return (
-      <Button onClick={() => onChange?.(1)}>
+      <Button onClick={() => onAdd?.()}>
         <ShoppingCart size={16} aria-hidden="true" />
       </Button>
     );
@@ -21,7 +28,7 @@ const AmountInput = ({ value, onChange, min, max }: AmountInputProps) => {
     <div className="inline-flex rounded-full justify-start">
       <Button
         aria-label="Downvote"
-        onClick={() => onChange?.(value - 1)}
+        onClick={() => onDeduct?.()}
         disabled={value <= 0 || value <= (min || 0)}
         aria-disabled={value <= 0 || value <= (min || 0) ? true : undefined}
       >
@@ -30,7 +37,7 @@ const AmountInput = ({ value, onChange, min, max }: AmountInputProps) => {
       <span className="px-4 flex items-center justify-center">{value}</span>
       <Button
         aria-label="Upvote"
-        onClick={() => onChange?.(value + 1)}
+        onClick={() => onAdd?.()}
         disabled={max ? value >= max : false}
       >
         <ChevronUpIcon size={16} aria-hidden="true" />

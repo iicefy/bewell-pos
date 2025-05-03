@@ -22,12 +22,15 @@ const CheckoutContextProvider = ({
   const [cart, setCart] = useState<CartItem[]>([]);
 
   function updateToCart(product: Product, type: "add" | "deduct") {
+    console.log("updateToCart", product, type);
+
     const existingProductIndex = cart.findIndex(
       (item) => item.productId === product.productId
     );
 
     if (type === "add") {
-      if (existingProductIndex) {
+      if (existingProductIndex !== -1) {
+        console.log("existingProductIndex", existingProductIndex);
         const updatedCart = [...cart];
         updatedCart[existingProductIndex].amount += 1;
         setCart(updatedCart);
@@ -35,9 +38,9 @@ const CheckoutContextProvider = ({
         setCart((prev) => [...prev, { ...product, amount: 1 }]);
       }
     }
-    
+
     if (type === "deduct") {
-      if (existingProductIndex) {
+      if (existingProductIndex !== -1) {
         const updatedCart = [...cart];
         updatedCart[existingProductIndex].amount -= 1;
 

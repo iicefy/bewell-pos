@@ -1,16 +1,23 @@
 import { Product } from "@/types/product";
 import { Badge } from "../ui/badge";
 import numeral from "numeral";
-import { useState } from "react";
 import AmountInput from "../amount-input";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { useCheckoutContext } from "@/context/checkout/useCheckoutContext";
 
 type ProductCardProps = {
   product: Product;
 };
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const [amount, setAmount] = useState(0);
+  const { cart, updateToCart } = useCheckoutContext();
+
+  const existingProductIndex = cart?.find(
+    (item) => item.productId === product.productId
+  );
+
+  console.log("existingProductIndex", existingProductIndex, cart);
+
   return (
     <div className="w-full h-full bg-white border rounded-lg p-4 flex flex-col gap-4">
       <img
@@ -40,8 +47,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <span className="text-sm text-red-500">Out of stock</span>
           ) : (
             <AmountInput
-              value={amount}
-              onChange={(amount) => setAmount(amount)}
+              value={existingProductIndex?.amount || 0}
+              onAdd={() => updateToCart(product, "add")}
+              onDeduct={() => updateToCart(product, "deduct")}
               max={product.stock}
             />
           )}
