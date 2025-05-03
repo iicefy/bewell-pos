@@ -15,7 +15,7 @@ function App() {
             <div className=" h-full w-full overflow-y-auto">
               <ProductList />
             </div>
-            <div className="h-full bg-white">
+            <div className="h-full">
               <Checkout />
             </div>
           </div>
