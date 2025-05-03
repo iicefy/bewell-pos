@@ -5,13 +5,13 @@ import ProductList from "./components/product-list";
 
 function App() {
   return (
-    <div className="bg-slate-200 h-screen relative">
+    <div className="bg-accent h-screen relative">
       <Header />
-      <div className=" bg-white w-full grid grid-cols-[1fr_600px] h-full pt-16">
-        <div className=" bg-slate-200 h-full">
+      <div className=" w-full grid grid-cols-[1fr_600px] h-full pt-16">
+        <div className=" h-full w-full">
           <ProductList />
         </div>
-        <div className="h-full">
+        <div className="h-full bg-white">
           <Checkout />
         </div>
       </div>
