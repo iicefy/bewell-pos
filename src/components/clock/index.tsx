@@ -33,7 +33,7 @@ const Clock = () => {
   }, []);
 
   return (
-    <h1 className="text-sm text-center bg-white rounded-full px-4 py-2 border">
+    <h1 className="text-sm text-center flex justify-center items-center bg-white rounded-full px-4 h-9 border">
       {time.hour.toString().padStart(2, "0")}:
       {time.minute.toString().padStart(2, "0")} {time.period}
     </h1>
