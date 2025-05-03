@@ -17,7 +17,7 @@ const ProductPagination = ({
 }: ProductPaginationProps) => {
   return (
     <div className="flex items-center justify-between gap-3">
-      <p className="text-muted-foreground grow text-sm" aria-live="polite">
+      <p className="text-muted-foreground grow text-sm">
         Page <span className="text-foreground">{pagination.currentPage}</span>{" "}
         of <span className="text-foreground">{pagination.totalPages}</span>
       </p>

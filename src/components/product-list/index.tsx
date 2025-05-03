@@ -34,15 +34,11 @@ const ProductList = () => {
 
   const renderProducts = () => {
     if (isLoading) {
-      return <div>Loading...</div>;
-    }
-
-    if (!data?.data) {
-      return <div>No products found</div>;
+      return <div className="text-gray-500">Loading...</div>;
     }
 
     if (!data?.data?.productList || data?.data?.productList.length === 0) {
-      return <div>No products found</div>;
+      return <div className="text-gray-500">No products found</div>;
     }
 
     return (
@@ -72,19 +68,19 @@ const ProductList = () => {
   return (
     <div className={layoutStyle}>
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Product List</h1>
-        <span className="text-gray-500">
+        <span className="text-gray-500 text-sm text-nowrap">
           {data?.pagination?.totalItems || 0} items
         </span>
+
+        <SearchInput
+          inputProps={{
+            value: search,
+            placeholder: "Search",
+            className: "w-full bg-white",
+            onChange: (e) => setSearch(e.target.value),
+          }}
+        />
       </div>
-      <SearchInput
-        inputProps={{
-          value: search,
-          placeholder: "Search",
-          className: "w-full bg-white",
-          onChange: (e) => setSearch(e.target.value),
-        }}
-      />
 
       {renderProducts()}
     </div>
