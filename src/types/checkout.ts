@@ -18,4 +18,5 @@ export type Summary = {
   priceOfVAT: number;
   point: number;
   summaryPrice: number;
+  amountItems: number;
 };

@@ -22,21 +22,30 @@ const Checkout = () => {
 
       <div className="flex bg-white w-full border rounded-xl">
         <div className="flex flex-col gap-4 p-4 w-full">
-          <span className="font-bold text-xl">Checkout</span>
+          <div className="flex justify-between items-center">
+            <span className="font-bold text-xl">Checkout</span>
+            <span className="text-sm text-gray-500">
+              {summaryPrice.amountItems}{" "}
+              {summaryPrice.amountItems > 1 ? "item" : "items"}
+            </span>
+          </div>
+
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">ราคา</span>
+            <div className="flex-1 border-t border-dotted mx-2"></div>
             <span className="text-sm text-gray-500">
               ฿ {numeral(summaryPrice.price).format("0,000.00")}
             </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">รวม VAT 7%</span>
+            <div className="flex-1 border-t border-dotted mx-2"></div>
             <span className="text-sm text-gray-500">
               ฿ {numeral(summaryPrice.priceOfVAT).format("0,000.00")}
             </span>
           </div>
           <div className="flex justify-between items-center w-full">
-            <span className="text-sm text-gray-500">ส่วนลดท้ายบิล</span>
+            <span className="text-sm text-gray-500 text-nowrap">ส่วนลดท้ายบิล</span>
             <div className="flex items-center justify-end gap-2 flex-wrap">
               <DiscountSelect
                 onChange={(value) => {
@@ -70,6 +79,7 @@ const Checkout = () => {
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">แลกคะแนน</span>
+            <div className="flex-1 border-t border-dotted mx-2"></div>
             <span className="text-sm text-gray-500">
               ฿ {numeral(summaryPrice.point).format("0,000.00")}
             </span>
