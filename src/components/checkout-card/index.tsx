@@ -12,6 +12,7 @@ import { useState } from "react";
 import EditModal from "../edit-modal";
 import DiscountSelect from "../discount-select";
 import NumberInput from "../number-input";
+import { calculateDiscountedPrice } from "@/lib/utils";
 
 type CheckoutCardProps = {
   data: CartItem;
@@ -33,9 +34,7 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
     ? data.stock - data.amount
     : data.stock - data.amountSendAfter;
 
-  const price = isSendAfter
-    ? data.price * data.amountSendAfter
-    : data.price * data.amount;
+  const price = calculateDiscountedPrice(amount, data.price, discount);
 
   return (
     <Fragment>

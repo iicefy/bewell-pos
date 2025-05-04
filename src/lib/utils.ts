@@ -1,3 +1,4 @@
+import { DiscountType } from "@/types/checkout";
 import { clsx, type ClassValue } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -37,3 +38,14 @@ export function capitalizeFirstLetter(string: string) {
   if (!string) return "";
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export const calculateDiscountedPrice = (
+  amount: number,
+  price: number,
+  discount: DiscountType
+) => {
+  if (discount.code === "percent") {
+    return amount * price * (1 - discount.amount);
+  }
+  return amount * price - discount.amount;
+};

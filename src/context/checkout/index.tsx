@@ -1,3 +1,4 @@
+import { calculateDiscountedPrice } from "@/lib/utils";
 import { CartItem, DiscountType, Summary } from "@/types/checkout";
 import { Product } from "@/types/product";
 import {
@@ -205,17 +206,6 @@ const CheckoutContextProvider = ({
   const [cart, dispatch] = useReducer(cartReducer, []);
 
   const summaryPrice: Summary = useMemo(() => {
-    const calculateDiscountedPrice = (
-      amount: number,
-      price: number,
-      discount: DiscountType
-    ) => {
-      if (discount.code === "percent") {
-        return amount * price * (1 - discount.amount);
-      }
-      return amount * price - discount.amount;
-    };
-
     const totalPrice = cart.reduce((acc, item) => {
       const itemPrice = calculateDiscountedPrice(
         item.amount,
