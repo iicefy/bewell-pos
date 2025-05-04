@@ -35,9 +35,9 @@ const Checkout = () => {
               ฿ {numeral(summaryPrice.preiceIcludedVAT).format("0,000.00")}
             </span>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center w-full">
             <span className="text-sm text-gray-500">ส่วนลดท้ายบิล</span>
-            <div className="flex justify-between items-center gap-2">
+            <div className="flex items-center justify-end gap-2 flex-wrap">
               <DiscountSelect
                 onChange={(value) => {
                   if (!value) {

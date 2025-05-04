@@ -22,7 +22,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <img
         src={product.imageUrl}
         alt={product.productId}
-        className="rounded-md object-cover mx-auto h-full aspect-square"
+        className="rounded-md object-cover mx-auto w-full aspect-square"
         loading="lazy"
       />
       <div className="flex flex-col gap-4 justify-between h-full">

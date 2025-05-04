@@ -51,7 +51,7 @@ const EditModal = ({ isOpen, onClose, data, onSave }: EditModalProps) => {
                 className="rounded-md object-cover w-full h-full absolute"
               />
             </div>
-            <div className="flex flex-col gap-4 justify-between h-full">
+            <div className="flex flex-col gap-4 justify-between w-full">
               <div className="flex flex-col gap-2">
                 <span className="font-bold">{data.productName}</span>
                 <span className="text-sm text-gray-500">{data.productId}</span>

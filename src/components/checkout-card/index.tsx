@@ -41,7 +41,7 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
     <Fragment>
       <div className="flex gap-4 w-full justify-between">
         <div className="border flex rounded-lg p-2 w-full gap-4">
-          <div className="h-32 aspect-square relative">
+          <div className="h-32 aspect-square relative hidden md:block">
             <img
               src={data.imageUrl}
               alt={data.productId}
@@ -49,11 +49,18 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
             />
           </div>
           <div className="flex flex-col gap-4 justify-between h-full w-full">
+            <div className="h-32 aspect-square relative md:hidden">
+              <img
+                src={data.imageUrl}
+                alt={data.productId}
+                className="rounded-md object-cover h-full absolute"
+              />
+            </div>
             <div className="flex flex-col gap-2">
               <span className="font-bold">{data.productName}</span>
               <span className="text-sm text-gray-500">{data.productId}</span>
             </div>
-            <div className="flex items-center justify-between flex-wrap">
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <span className="font-bold text-xl">
                 ฿ {numeral(price).format("0,000.00")}
               </span>
@@ -77,7 +84,7 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
                 min={1}
               />
             </div>
-            <div className="flex items-center gap-4 justify-end flex-wrap">
+            <div className="flex flex-col md:items-center gap-4 md:flex-row md:justify-end flex-wrap">
               <span className="text-sm text-gray-500">ส่วนลด: </span>
               <DiscountSelect
                 onChange={(code) => {
