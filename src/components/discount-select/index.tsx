@@ -16,6 +16,7 @@ type DiscountSelectProps = {
 };
 
 const DiscountSelect = ({ value, onChange }: DiscountSelectProps) => {
+  console.log("value", value);
   const [open, setOpen] = useState(false);
   const discountList = [
     { label: "Baht", value: "fixed" },

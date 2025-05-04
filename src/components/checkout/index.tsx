@@ -5,9 +5,11 @@ import Date from "../date";
 import DiscountSelect from "../discount-select";
 import { Button } from "../ui/button";
 import NumberInput from "../number-input";
+import numeral from "numeral";
 
 const Checkout = () => {
-  const { billDiscount, updateBillDiscount } = useCheckoutContext();
+  const { billDiscount, updateBillDiscount, summaryPrice } =
+    useCheckoutContext();
 
   return (
     <div className="flex flex-col gap-4 pl-2 pr-4 p-4 h-full">
@@ -23,11 +25,15 @@ const Checkout = () => {
           <span className="font-bold text-xl">Checkout</span>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">ราคา</span>
-            <span className="text-sm text-gray-500">฿ 1,234.56</span>
+            <span className="text-sm text-gray-500">
+              ฿ {numeral(summaryPrice.price).format("0,000.00")}
+            </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">รวม VAT 7%</span>
-            <span className="text-sm text-gray-500">฿ 1,234.56</span>
+            <span className="text-sm text-gray-500">
+              ฿ {numeral(summaryPrice.preiceIcludedVAT).format("0,000.00")}
+            </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">ส่วนลดท้ายบิล</span>
@@ -58,16 +64,21 @@ const Checkout = () => {
                     amount: e,
                   }));
                 }}
+                max={summaryPrice.preiceIcludedVAT}
               />
             </div>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">แลกคะแนน</span>
-            <span className="text-sm text-gray-500">฿ 1,234.56</span>
+            <span className="text-sm text-gray-500">
+              ฿ {numeral(summaryPrice.point).format("0,000.00")}
+            </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">รวมราคาทั้งหมด</span>
-            <span className="text-sm text-gray-500">฿ 1,234.56</span>
+            <span className="text-sm text-gray-500">
+              ฿ {numeral(summaryPrice.summaryPrice).format("0,000.00")}
+            </span>
           </div>
           <div className="flex justify-end items-center gap-4 mt-4">
             <Button variant={"outline"}>ยกเลิก</Button>

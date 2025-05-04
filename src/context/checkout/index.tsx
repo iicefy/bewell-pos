@@ -1,10 +1,11 @@
-import { CartItem, DiscountType } from "@/types/checkout";
+import { CartItem, DiscountType, Summary } from "@/types/checkout";
 import { Product } from "@/types/product";
 import {
   ActionDispatch,
   createContext,
   Dispatch,
   SetStateAction,
+  useMemo,
   useReducer,
   useState,
 } from "react";
@@ -14,11 +15,18 @@ const CheckoutContext = createContext<{
   updateToCart: ActionDispatch<[action: CartAction]>;
   billDiscount: DiscountType;
   updateBillDiscount: Dispatch<SetStateAction<DiscountType>>;
+  summaryPrice: Summary;
 }>({
   cart: [],
   updateToCart: () => {},
   billDiscount: { code: "", amount: 0 },
   updateBillDiscount: () => {},
+  summaryPrice: {
+    point: 0,
+    preiceIcludedVAT: 0,
+    price: 0,
+    summaryPrice: 0,
+  },
 });
 
 type CheckoutContextProviderProps = {
@@ -66,10 +74,16 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
 
         if (action.isSendAfter) {
           updatedCart[existingProductIndex].amountSendAfter += 1;
-          updatedCart[existingProductIndex].discountSendAfter.amount = 0;
+          updatedCart[existingProductIndex].discountSendAfter = {
+            amount: 0,
+            code: "",
+          };
         } else {
           updatedCart[existingProductIndex].amount += 1;
-          updatedCart[existingProductIndex].discount.amount = 0;
+          updatedCart[existingProductIndex].discount = {
+            amount: 0,
+            code: "",
+          };
         }
 
         return updatedCart;
@@ -88,10 +102,16 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
 
         if (action.isSendAfter) {
           updatedCart[existingProductIndex].amountSendAfter -= 1;
-          updatedCart[existingProductIndex].discountSendAfter.amount = 0;
+          updatedCart[existingProductIndex].discountSendAfter = {
+            amount: 0,
+            code: "",
+          };
         } else {
           updatedCart[existingProductIndex].amount -= 1;
-          updatedCart[existingProductIndex].discount.amount = 0;
+          updatedCart[existingProductIndex].discount = {
+            amount: 0,
+            code: "",
+          };
         }
 
         return updatedCart;
@@ -147,8 +167,14 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
           ...updatedCart[existingProductIndex],
           ...action.product,
         };
-        updatedCart[existingProductIndex].discount.amount = 0;
-        updatedCart[existingProductIndex].discountSendAfter.amount = 0;
+        updatedCart[existingProductIndex].discountSendAfter = {
+          amount: 0,
+          code: "",
+        };
+        updatedCart[existingProductIndex].discount = {
+          amount: 0,
+          code: "",
+        };
         return updatedCart;
       }
 
@@ -189,6 +215,49 @@ const CheckoutContextProvider = ({
   });
   const [cart, dispatch] = useReducer(cartReducer, []);
 
+  const summaryPrice: Summary = useMemo(() => {
+    const calculateDiscountedPrice = (
+      amount: number,
+      price: number,
+      discount: DiscountType
+    ) => {
+      if (discount.code === "percent") {
+        return amount * price * (1 - discount.amount);
+      }
+      return amount * price - discount.amount;
+    };
+
+    const totalPrice = cart.reduce((acc, item) => {
+      const itemPrice = calculateDiscountedPrice(
+        item.amount,
+        item.price,
+        item.discount
+      );
+      const itemSendAfterPrice = calculateDiscountedPrice(
+        item.amountSendAfter,
+        item.price,
+        item.discountSendAfter
+      );
+      return acc + itemPrice + itemSendAfterPrice;
+    }, 0);
+
+    const includedVAT = totalPrice * 1.07;
+
+    const calculateBillDiscount = (price: number, discount: DiscountType) => {
+      if (discount.code === "percent") {
+        return price * (1 - discount.amount);
+      }
+      return price - discount.amount;
+    };
+
+    return {
+      point: 0,
+      price: totalPrice,
+      preiceIcludedVAT: includedVAT,
+      summaryPrice: calculateBillDiscount(includedVAT, billDiscount),
+    };
+  }, [billDiscount, cart]);
+
   return (
     <CheckoutContext.Provider
       value={{
@@ -196,6 +265,7 @@ const CheckoutContextProvider = ({
         updateToCart: dispatch,
         billDiscount,
         updateBillDiscount: setBillDiscount,
+        summaryPrice,
       }}
     >
       {children}
