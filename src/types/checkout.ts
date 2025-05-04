@@ -4,7 +4,7 @@ export interface CartItem extends Product {
   isSendAfter: boolean;
   amount: number;
   amountSendAfter: number;
-  disCount: DiscountType;
+  discount: DiscountType;
   disCountSendAfter: DiscountType;
 }
 

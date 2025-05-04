@@ -32,7 +32,13 @@ type CartAction =
       productId: string;
       isSendAfter: boolean;
     }
-  | { type: "update"; product: CartItem };
+  | { type: "update"; product: CartItem }
+  | {
+      type: "update_discount";
+      productId: string;
+      isSendAfter: boolean;
+      discount: Partial<DiscountType>;
+    };
 
 const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
   switch (action.type) {
@@ -44,7 +50,7 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
           isSendAfter: false,
           amount: 1,
           amountSendAfter: 0,
-          disCount: { code: "", amount: 0 },
+          discount: { code: "", amount: 0 },
           disCountSendAfter: { code: "", amount: 0 },
         },
       ];
@@ -107,7 +113,7 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
           updatedCart[existingProductIndex].isSendAfter = false;
         } else {
           updatedCart[existingProductIndex].amount = 0;
-          updatedCart[existingProductIndex].disCount = {
+          updatedCart[existingProductIndex].discount = {
             amount: 0,
             code: "",
           };
@@ -137,6 +143,36 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
           ...updatedCart[existingProductIndex],
           ...action.product,
         };
+        return updatedCart;
+      }
+
+      return state;
+    }
+
+    case "update_discount": {
+      const existingProductIndex = state.findIndex(
+        (item) => item.productId === action.productId
+      );
+
+      if (existingProductIndex !== -1) {
+        const updatedCart = [...state];
+
+        if (action.isSendAfter) {
+          updatedCart[existingProductIndex].disCountSendAfter.amount =
+            action.discount.amount ||
+            updatedCart[existingProductIndex].disCountSendAfter.amount;
+          updatedCart[existingProductIndex].disCountSendAfter.code =
+            action.discount.code ||
+            updatedCart[existingProductIndex].disCountSendAfter.code;
+        } else {
+          updatedCart[existingProductIndex].discount.amount =
+            action.discount.amount ||
+            updatedCart[existingProductIndex].discount.amount;
+          updatedCart[existingProductIndex].discount.code =
+            action.discount.code ||
+            updatedCart[existingProductIndex].discount.code;
+        }
+
         return updatedCart;
       }
 

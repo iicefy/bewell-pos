@@ -23,7 +23,7 @@ const ProductInfo = ({ data, isSendAfter }: CheckoutCardProps) => {
 
   const discount: DiscountType = isSendAfter
     ? data.disCountSendAfter
-    : data.disCount;
+    : data.discount;
 
   const amount = isSendAfter ? data.amountSendAfter : data.amount;
 
@@ -77,9 +77,18 @@ const ProductInfo = ({ data, isSendAfter }: CheckoutCardProps) => {
           <div className="flex items-center gap-2 w-full">
             <span className="text-sm text-gray-500">ส่วนลด: </span>
             <DiscountSelect
-              onChange={() => null}
+              onChange={(code) => {
+                updateToCart({
+                  type: "update_discount",
+                  discount: {
+                    code: code,
+                  },
+                  isSendAfter: !!isSendAfter,
+                  productId: data.productId,
+                });
+              }}
               value={
-                isSendAfter ? data.disCount.code : data.disCountSendAfter.code
+                isSendAfter ? data.disCountSendAfter.code : data.discount.code
               }
             />
             <Input
@@ -87,6 +96,17 @@ const ProductInfo = ({ data, isSendAfter }: CheckoutCardProps) => {
               className="w-full"
               disabled={!discount.code}
               value={discount.amount}
+              type="number"
+              onChange={(e) => {
+                updateToCart({
+                  type: "update_discount",
+                  discount: {
+                    amount: numeral(e.target.value).value() || 0,
+                  },
+                  isSendAfter: !!isSendAfter,
+                  productId: data.productId,
+                });
+              }}
             />
           </div>
         </div>
