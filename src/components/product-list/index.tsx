@@ -7,6 +7,7 @@ import { Fragment, useState } from "react";
 import ProductPagination from "../product-pagination";
 import { useSearchParams } from "react-router";
 import { useNavigate } from "react-router";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const layoutStyle = cn("p-4 flex flex-col gap-4");
 const ProductList = () => {
@@ -15,10 +16,10 @@ const ProductList = () => {
   const pageQuery: number = parseInt(searchParams.get("page") || "1", 10);
   const searchQuery: string = searchParams.get("search") || "";
   const [search, setSearch] = useState(searchQuery);
-
+  const isMobile = useIsMobile();
   const pagination = {
     currentPage: pageQuery || 1,
-    limit: 6,
+    limit: isMobile ? 4 : 6,
   };
 
   const searchDebounce = useDebounce(search, 500, () => {
