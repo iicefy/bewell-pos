@@ -11,8 +11,8 @@ import {
 import { CartItem, DiscountType } from "@/types/checkout";
 import numeral from "numeral";
 import DiscountSelect from "../discount-select";
-import { Input } from "../ui/input";
 import AmountInput from "../amount-input";
+import NumberInput from "../number-input";
 
 type EditModalProps = {
   isOpen: boolean;
@@ -68,17 +68,30 @@ const EditModal = ({ isOpen, onClose, data, onSave }: EditModalProps) => {
                   min={1}
                 />
               </div>
-              <div className="flex items-center gap-4 ">
-                <div className="flex items-center gap-2 w-full">
-                  <span className="text-sm text-gray-500">ส่วนลด: </span>
-                  <DiscountSelect onChange={() => null} value={discount.code} />
-                  <Input
-                    placeholder="Discount"
-                    className="w-full"
-                    disabled={!discount.code}
-                    value={discount.amount}
-                  />
-                </div>
+
+              <div className="flex flex-col md:items-center gap-4 md:flex-row md:justify-end flex-wrap">
+                <span className="text-sm text-gray-500">ส่วนลด: </span>
+                <DiscountSelect
+                  onChange={(e) =>
+                    setDiscount(() => ({
+                      amount: 0,
+                      code: e,
+                    }))
+                  }
+                  value={discount.code}
+                />
+                <NumberInput
+                  type={discount.code}
+                  disabled={!discount.code}
+                  value={discount.amount}
+                  onChange={(e) => {
+                    setDiscount((prev) => ({
+                      amount: e,
+                      code: prev.code,
+                    }));
+                  }}
+                  max={data.price}
+                />
               </div>
             </div>
           </div>

@@ -163,18 +163,7 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
 
       if (existingProductIndex !== -1) {
         const updatedCart = [...state];
-        updatedCart[existingProductIndex] = {
-          ...updatedCart[existingProductIndex],
-          ...action.product,
-        };
-        updatedCart[existingProductIndex].discountSendAfter = {
-          amount: 0,
-          code: "",
-        };
-        updatedCart[existingProductIndex].discount = {
-          amount: 0,
-          code: "",
-        };
+        updatedCart[existingProductIndex] = action.product;
         return updatedCart;
       }
 
