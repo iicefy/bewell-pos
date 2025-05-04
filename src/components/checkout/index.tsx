@@ -75,8 +75,8 @@ const Checkout = () => {
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-500">รวมราคาทั้งหมด</span>
-            <span className="text-sm text-gray-500">
+            <span className="font-bold text-xl">รวมราคาทั้งหมด</span>
+            <span className="font-bold text-xl">
               ฿ {numeral(summaryPrice.summaryPrice).format("0,000.00")}
             </span>
           </div>
