@@ -46,9 +46,9 @@ const Checkout = () => {
                       amount: 0,
                     }));
                   } else {
-                    updateBillDiscount((prev) => ({
+                    updateBillDiscount(() => ({
                       code: value,
-                      amount: prev.amount,
+                      amount: 0,
                     }));
                   }
                 }}

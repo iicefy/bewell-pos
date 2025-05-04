@@ -85,9 +85,7 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
                     type: "update_discount",
                     discount: {
                       code: code,
-                      amount: isSendAfter
-                        ? data.discountSendAfter.amount
-                        : data.discount.amount,
+                      amount: 0,
                     },
                     isSendAfter: !!isSendAfter,
                     productId: data.productId,
