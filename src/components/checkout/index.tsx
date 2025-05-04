@@ -32,7 +32,7 @@ const Checkout = () => {
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">รวม VAT 7%</span>
             <span className="text-sm text-gray-500">
-              ฿ {numeral(summaryPrice.preiceIcludedVAT).format("0,000.00")}
+              ฿ {numeral(summaryPrice.priceOfVAT).format("0,000.00")}
             </span>
           </div>
           <div className="flex justify-between items-center w-full">
@@ -64,7 +64,7 @@ const Checkout = () => {
                     amount: e,
                   }));
                 }}
-                max={summaryPrice.preiceIcludedVAT}
+                max={summaryPrice.priceOfVAT}
               />
             </div>
           </div>

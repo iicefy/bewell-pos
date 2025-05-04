@@ -15,7 +15,7 @@ export interface DiscountType {
 
 export type Summary = {
   price: number;
-  preiceIcludedVAT: number;
+  priceOfVAT: number;
   point: number;
   summaryPrice: number;
 };

@@ -24,7 +24,7 @@ const CheckoutContext = createContext<{
   updateBillDiscount: () => {},
   summaryPrice: {
     point: 0,
-    preiceIcludedVAT: 0,
+    priceOfVAT: 0,
     price: 0,
     summaryPrice: 0,
   },
@@ -220,6 +220,7 @@ const CheckoutContextProvider = ({
       return acc + itemPrice + itemSendAfterPrice;
     }, 0);
 
+    const priceVAT = totalPrice * 0.07;
     const includedVAT = totalPrice * 1.07;
 
     const calculateBillDiscount = (price: number, discount: DiscountType) => {
@@ -232,7 +233,7 @@ const CheckoutContextProvider = ({
     return {
       point: 0,
       price: totalPrice,
-      preiceIcludedVAT: includedVAT,
+      priceOfVAT: priceVAT,
       summaryPrice: calculateBillDiscount(includedVAT, billDiscount),
     };
   }, [billDiscount, cart]);
