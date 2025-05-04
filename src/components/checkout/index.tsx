@@ -1,17 +1,14 @@
+import { useCheckoutContext } from "@/context/checkout/useCheckoutContext";
 import CheckoutList from "../checkout-list";
 import Clock from "../clock";
 import Date from "../date";
+import DiscountSelect from "../discount-select";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 const Checkout = () => {
+  const { billDiscount, updateBillDiscount } = useCheckoutContext();
+
   return (
     <div className="flex flex-col gap-4 pl-2 pr-4 p-4 h-full">
       <div className="flex gap-4">
@@ -35,16 +32,27 @@ const Checkout = () => {
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">ส่วนลดท้ายบิล</span>
             <div className="flex justify-between items-center gap-2">
-              <Select>
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder="" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="baht">บาท (฿)</SelectItem>
-                  <SelectItem value="percent">เปอร์เซ็นต์</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input className="w-32" />
+              <DiscountSelect
+                onChange={(value) => {
+                  if (!value) {
+                    updateBillDiscount(() => ({
+                      code: "",
+                      amount: 0,
+                    }));
+                  } else {
+                    updateBillDiscount((prev) => ({
+                      code: value,
+                      amount: prev.amount,
+                    }));
+                  }
+                }}
+                value={billDiscount.code}
+              />
+              <Input
+                className=""
+                disabled={!billDiscount.code}
+                placeholder="Discount"
+              />
             </div>
           </div>
           <div className="flex justify-between items-center">

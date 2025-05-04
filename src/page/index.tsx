@@ -8,7 +8,7 @@ const Home = () => {
     <CheckoutContextProvider>
       <div className="bg-accent h-screen relative">
         <Header />
-        <div className=" w-full grid grid-cols-[1fr_500px] h-full pt-16">
+        <div className=" w-full grid grid-cols-[1fr_700px] h-full pt-16">
           <div className=" h-full w-full overflow-y-auto">
             <ProductList />
           </div>

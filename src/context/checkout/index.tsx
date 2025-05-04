@@ -1,65 +1,173 @@
-import { CartItem } from "@/types/checkout";
+import { CartItem, DiscountType } from "@/types/checkout";
 import { Product } from "@/types/product";
-import { createContext, useState } from "react";
+import {
+  ActionDispatch,
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useReducer,
+  useState,
+} from "react";
 
 const CheckoutContext = createContext<{
   cart: CartItem[];
-  updateToCart: (product: Product, type: "add" | "deduct") => void;
-  removeFromCart: (productId: string) => void;
+  updateToCart: ActionDispatch<[action: CartAction]>;
+  billDiscount: DiscountType;
+  updateBillDiscount: Dispatch<SetStateAction<DiscountType>>;
 }>({
   cart: [],
   updateToCart: () => {},
-  removeFromCart: () => {},
+  billDiscount: { code: "", amount: 0 },
+  updateBillDiscount: () => {},
 });
 
 type CheckoutContextProviderProps = {
   children: React.ReactNode;
 };
 
+type CartAction =
+  | { type: "add"; product: Product }
+  | {
+      type: "decrease" | "increase" | "remove";
+      productId: string;
+      isSendAfter: boolean;
+    }
+  | { type: "update"; product: CartItem };
+
+const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
+  switch (action.type) {
+    case "add": {
+      return [
+        ...state,
+        {
+          ...action.product,
+          isSendAfter: false,
+          amount: 1,
+          amountSendAfter: 0,
+          disCount: { code: "", amount: 0 },
+          disCountSendAfter: { code: "", amount: 0 },
+        },
+      ];
+    }
+
+    case "increase": {
+      const existingProductIndex = state.findIndex(
+        (item) => item.productId === action.productId
+      );
+
+      if (existingProductIndex !== -1) {
+        const updatedCart = [...state];
+
+        if (action.isSendAfter) {
+          updatedCart[existingProductIndex].amountSendAfter += 1;
+        } else {
+          updatedCart[existingProductIndex].amount += 1;
+        }
+
+        return updatedCart;
+      }
+
+      return state;
+    }
+
+    case "decrease": {
+      const existingProductIndex = state.findIndex(
+        (item) => item.productId === action.productId
+      );
+
+      if (existingProductIndex !== -1) {
+        const updatedCart = [...state];
+
+        if (action.isSendAfter) {
+          updatedCart[existingProductIndex].amountSendAfter -= 1;
+        } else {
+          updatedCart[existingProductIndex].amount -= 1;
+        }
+
+        return updatedCart;
+      }
+
+      return state;
+    }
+
+    case "remove": {
+      const existingProductIndex = state.findIndex(
+        (item) => item.productId === action.productId
+      );
+
+      if (existingProductIndex !== -1) {
+        const updatedCart = [...state];
+
+        if (action.isSendAfter) {
+          updatedCart[existingProductIndex].amountSendAfter = 0;
+          updatedCart[existingProductIndex].disCountSendAfter = {
+            amount: 0,
+            code: "",
+          };
+          updatedCart[existingProductIndex].isSendAfter = false;
+        } else {
+          updatedCart[existingProductIndex].amount = 0;
+          updatedCart[existingProductIndex].disCount = {
+            amount: 0,
+            code: "",
+          };
+        }
+
+        if (
+          updatedCart[existingProductIndex].amount === 0 &&
+          updatedCart[existingProductIndex].amountSendAfter === 0
+        ) {
+          return updatedCart.filter((_, i) => i !== existingProductIndex);
+        }
+
+        return updatedCart;
+      }
+
+      return state;
+    }
+
+    case "update": {
+      const existingProductIndex = state.findIndex(
+        (item) => item.productId === action.product.productId
+      );
+
+      if (existingProductIndex !== -1) {
+        const updatedCart = [...state];
+        updatedCart[existingProductIndex] = {
+          ...updatedCart[existingProductIndex],
+          ...action.product,
+        };
+        return updatedCart;
+      }
+
+      return state;
+    }
+
+    default:
+      return state;
+  }
+};
+
 const CheckoutContextProvider = ({
   children,
 }: CheckoutContextProviderProps) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [billDiscount, setBillDiscount] = useState<DiscountType>({
+    code: "",
+    amount: 0,
+  });
+  const [cart, dispatch] = useReducer(cartReducer, []);
 
-  function updateToCart(product: Product, type: "add" | "deduct") {
-    console.log("updateToCart", product, type);
-
-    const existingProductIndex = cart.findIndex(
-      (item) => item.productId === product.productId
-    );
-
-    if (type === "add") {
-      if (existingProductIndex !== -1) {
-        console.log("existingProductIndex", existingProductIndex);
-        const updatedCart = [...cart];
-        updatedCart[existingProductIndex].amount += 1;
-        setCart(updatedCart);
-      } else {
-        setCart((prev) => [...prev, { ...product, amount: 1 }]);
-      }
-    }
-
-    if (type === "deduct") {
-      if (existingProductIndex !== -1) {
-        const updatedCart = [...cart];
-        updatedCart[existingProductIndex].amount -= 1;
-
-        if (updatedCart[existingProductIndex].amount <= 0) {
-          updatedCart.splice(existingProductIndex, 1);
-        }
-
-        setCart(updatedCart);
-      }
-    }
-  }
-
-  function removeFromCart(productId: string) {
-    const updatedCart = cart.filter((item) => item.productId !== productId);
-    setCart(updatedCart);
-  }
+  console.log(cart);
 
   return (
-    <CheckoutContext.Provider value={{ cart, updateToCart, removeFromCart }}>
+    <CheckoutContext.Provider
+      value={{
+        cart,
+        updateToCart: dispatch,
+        billDiscount,
+        updateBillDiscount: setBillDiscount,
+      }}
+    >
       {children}
     </CheckoutContext.Provider>
   );
