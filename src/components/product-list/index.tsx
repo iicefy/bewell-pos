@@ -43,7 +43,7 @@ const ProductList = () => {
 
     return (
       <Fragment>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {data?.data?.productList?.map((product) => (
             <ProductCard key={product.productId} product={product} />
           ))}

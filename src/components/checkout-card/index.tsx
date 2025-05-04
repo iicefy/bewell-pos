@@ -48,12 +48,12 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
               className="rounded-md object-cover w-full h-full absolute"
             />
           </div>
-          <div className="flex flex-col gap-4 justify-between h-full">
+          <div className="flex flex-col gap-4 justify-between h-full w-full">
             <div className="flex flex-col gap-2">
               <span className="font-bold">{data.productName}</span>
               <span className="text-sm text-gray-500">{data.productId}</span>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap">
               <span className="font-bold text-xl">
                 ฿ {numeral(price).format("0,000.00")}
               </span>
@@ -77,7 +77,7 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
                 min={1}
               />
             </div>
-            <div className="flex items-center gap-4 justify-end">
+            <div className="flex items-center gap-4 justify-end flex-wrap">
               <span className="text-sm text-gray-500">ส่วนลด: </span>
               <DiscountSelect
                 onChange={(code) => {

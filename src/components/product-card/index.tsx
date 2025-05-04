@@ -38,7 +38,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {capitalizeFirstLetter(product.category)}
         </Badge>
 
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between flex-wrap gap-2">
           <div className="flex flex-col gap-1">
             <span className="font-bold text-xl text-nowrap">
               ฿ {numeral(product.price).format("0,000.00")}

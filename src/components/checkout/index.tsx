@@ -12,7 +12,7 @@ const Checkout = () => {
     useCheckoutContext();
 
   return (
-    <div className="flex flex-col gap-4 pl-2 pr-4 p-4 h-full">
+    <div className="flex flex-col gap-4 pl-2 pr-4 p-4 xl:h-full">
       <div className="flex gap-4">
         <Date />
         <Clock />
