@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon, ShoppingCart } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Button } from "../ui/button";
 
 type AmountInputProps = {
@@ -16,14 +16,6 @@ const AmountInput = ({
   min,
   max,
 }: AmountInputProps) => {
-  if (value === 0) {
-    return (
-      <Button onClick={() => onAdd?.()}>
-        <ShoppingCart size={16} aria-hidden="true" />
-      </Button>
-    );
-  }
-
   return (
     <div className="inline-flex rounded-full justify-start">
       <Button
