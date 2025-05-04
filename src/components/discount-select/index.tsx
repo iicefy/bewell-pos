@@ -53,6 +53,7 @@ const DiscountSelect = ({ value, onChange }: DiscountSelectProps) => {
             <CommandGroup>
               {discountList.map((discount) => (
                 <CommandItem
+                  className="w-full"
                   key={discount.value}
                   value={discount.value}
                   onSelect={(currentValue) => {

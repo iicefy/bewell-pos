@@ -4,7 +4,7 @@ import Clock from "../clock";
 import Date from "../date";
 import DiscountSelect from "../discount-select";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import NumberInput from "../number-input";
 
 const Checkout = () => {
   const { billDiscount, updateBillDiscount } = useCheckoutContext();
@@ -48,10 +48,15 @@ const Checkout = () => {
                 }}
                 value={billDiscount.code}
               />
-              <Input
-                className=""
+              <NumberInput
                 disabled={!billDiscount.code}
-                placeholder="Discount"
+                value={billDiscount.amount}
+                onChange={(e) => {
+                  updateBillDiscount((prev) => ({
+                    code: prev.code,
+                    amount: e,
+                  }));
+                }}
               />
             </div>
           </div>
