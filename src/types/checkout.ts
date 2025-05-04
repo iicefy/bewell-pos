@@ -5,10 +5,17 @@ export interface CartItem extends Product {
   amount: number;
   amountSendAfter: number;
   discount: DiscountType;
-  disCountSendAfter: DiscountType;
+  discountSendAfter: DiscountType;
 }
 
 export interface DiscountType {
   code: string;
   amount: number;
 }
+
+export type Summary = {
+  price: number;
+  preiceIcludedVAT: number;
+  point: number;
+  summaryPrice: number;
+};

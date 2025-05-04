@@ -92,7 +92,7 @@ const EditModal = ({ isOpen, onClose, data, onSave }: EditModalProps) => {
                 isSendAfter: true,
                 amount: data.amount - amount,
                 amountSendAfter: amount,
-                disCountSendAfter: discount,
+                discountSendAfter: discount,
               });
               onClose();
             }}

@@ -49,6 +49,7 @@ const Checkout = () => {
                 value={billDiscount.code}
               />
               <NumberInput
+                type={billDiscount.code}
                 disabled={!billDiscount.code}
                 value={billDiscount.amount}
                 onChange={(e) => {
@@ -62,6 +63,10 @@ const Checkout = () => {
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-500">แลกคะแนน</span>
+            <span className="text-sm text-gray-500">฿ 1,234.56</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-500">รวมราคาทั้งหมด</span>
             <span className="text-sm text-gray-500">฿ 1,234.56</span>
           </div>
           <div className="flex justify-end items-center gap-4 mt-4">

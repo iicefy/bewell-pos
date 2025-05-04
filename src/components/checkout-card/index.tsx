@@ -24,7 +24,7 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
   const { updateToCart } = useCheckoutContext();
 
   const discount: DiscountType = isSendAfter
-    ? data.disCountSendAfter
+    ? data.discountSendAfter
     : data.discount;
 
   const amount = isSendAfter ? data.amountSendAfter : data.amount;
@@ -85,16 +85,20 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
                     type: "update_discount",
                     discount: {
                       code: code,
+                      amount: isSendAfter
+                        ? data.discountSendAfter.amount
+                        : data.discount.amount,
                     },
                     isSendAfter: !!isSendAfter,
                     productId: data.productId,
                   });
                 }}
                 value={
-                  isSendAfter ? data.disCountSendAfter.code : data.discount.code
+                  isSendAfter ? data.discountSendAfter.code : data.discount.code
                 }
               />
               <NumberInput
+                type={discount.code}
                 disabled={!discount.code}
                 value={discount.amount}
                 onChange={(e) => {
@@ -102,11 +106,15 @@ const CheckoutCard = ({ data, isSendAfter }: CheckoutCardProps) => {
                     type: "update_discount",
                     discount: {
                       amount: e,
+                      code: isSendAfter
+                        ? data.discountSendAfter.code
+                        : data.discount.code,
                     },
                     isSendAfter: !!isSendAfter,
                     productId: data.productId,
                   });
                 }}
+                max={price}
               />
             </div>
           </div>

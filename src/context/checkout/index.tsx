@@ -37,7 +37,7 @@ type CartAction =
       type: "update_discount";
       productId: string;
       isSendAfter: boolean;
-      discount: Partial<DiscountType>;
+      discount: DiscountType;
     };
 
 const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
@@ -51,7 +51,7 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
           amount: 1,
           amountSendAfter: 0,
           discount: { code: "", amount: 0 },
-          disCountSendAfter: { code: "", amount: 0 },
+          discountSendAfter: { code: "", amount: 0 },
         },
       ];
     }
@@ -66,8 +66,10 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
 
         if (action.isSendAfter) {
           updatedCart[existingProductIndex].amountSendAfter += 1;
+          updatedCart[existingProductIndex].discountSendAfter.amount = 0;
         } else {
           updatedCart[existingProductIndex].amount += 1;
+          updatedCart[existingProductIndex].discount.amount = 0;
         }
 
         return updatedCart;
@@ -86,8 +88,10 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
 
         if (action.isSendAfter) {
           updatedCart[existingProductIndex].amountSendAfter -= 1;
+          updatedCart[existingProductIndex].discountSendAfter.amount = 0;
         } else {
           updatedCart[existingProductIndex].amount -= 1;
+          updatedCart[existingProductIndex].discount.amount = 0;
         }
 
         return updatedCart;
@@ -106,7 +110,7 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
 
         if (action.isSendAfter) {
           updatedCart[existingProductIndex].amountSendAfter = 0;
-          updatedCart[existingProductIndex].disCountSendAfter = {
+          updatedCart[existingProductIndex].discountSendAfter = {
             amount: 0,
             code: "",
           };
@@ -143,6 +147,8 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
           ...updatedCart[existingProductIndex],
           ...action.product,
         };
+        updatedCart[existingProductIndex].discount.amount = 0;
+        updatedCart[existingProductIndex].discountSendAfter.amount = 0;
         return updatedCart;
       }
 
@@ -158,19 +164,9 @@ const cartReducer = (state: CartItem[], action: CartAction): CartItem[] => {
         const updatedCart = [...state];
 
         if (action.isSendAfter) {
-          updatedCart[existingProductIndex].disCountSendAfter.amount =
-            action.discount.amount ||
-            updatedCart[existingProductIndex].disCountSendAfter.amount;
-          updatedCart[existingProductIndex].disCountSendAfter.code =
-            action.discount.code ||
-            updatedCart[existingProductIndex].disCountSendAfter.code;
+          updatedCart[existingProductIndex].discountSendAfter = action.discount;
         } else {
-          updatedCart[existingProductIndex].discount.amount =
-            action.discount.amount ||
-            updatedCart[existingProductIndex].discount.amount;
-          updatedCart[existingProductIndex].discount.code =
-            action.discount.code ||
-            updatedCart[existingProductIndex].discount.code;
+          updatedCart[existingProductIndex].discount = action.discount;
         }
 
         return updatedCart;
@@ -192,8 +188,6 @@ const CheckoutContextProvider = ({
     amount: 0,
   });
   const [cart, dispatch] = useReducer(cartReducer, []);
-
-  console.log(cart);
 
   return (
     <CheckoutContext.Provider
